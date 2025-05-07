@@ -1,17 +1,43 @@
 // Uncomment this line to use CSS modules
 // import styles from './app.module.css';
-import NxWelcome from './nx-welcome';
-
-import { Route, Routes, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, Route, Routes } from 'react-router-dom';
+import { transactionApi, TransactionResponse } from 'src/apis/transactionApi';
+import { TransactionTable } from 'src/components/TransactionTable/TransactionTable';
+import { tryCatch } from 'src/utils/tryCatch';
 
 export function App() {
+  const [state, setState] = useState({
+    transactions: [] as TransactionResponse,
+  });
+  useEffect(() => {
+    (async () => {
+      const { error, data } = await tryCatch(
+        transactionApi({
+          fileName: 'BTC-account-statement_2025-04-01_2025-05-01.csv',
+        })
+      );
+
+      if (error) {
+        console.error('Error fetching transactions:', error);
+        return;
+      }
+
+      if (data) {
+        console.log('Fetched transactions:', data);
+        setState((prevState) => ({
+          ...prevState,
+          transactions: data,
+        }));
+      }
+    })();
+  }, []);
+
+  console.log('State:', state);
+
   return (
     <div>
-      <NxWelcome title="crypto-tracker" />
-
-      {/* START: routes */}
-      {/* These routes and navigation have been generated for you */}
-      {/* Feel free to move and update them to fit your needs */}
+      <h1>Crypto Tracker</h1>
       <br />
       <hr />
       <br />
@@ -21,7 +47,7 @@ export function App() {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/page-2">Page 2</Link>
+            <Link to="/transactions">Transactions</Link>
           </li>
         </ul>
       </div>
@@ -31,20 +57,12 @@ export function App() {
           element={
             <div>
               This is the generated root route.{' '}
-              <Link to="/page-2">Click here for page 2.</Link>
+              <Link to="/transactions">Transactions</Link>
             </div>
           }
         />
-        <Route
-          path="/page-2"
-          element={
-            <div>
-              <Link to="/">Click here to go back to root page.</Link>
-            </div>
-          }
-        />
+        <Route path="/transactions" element={<TransactionTable />} />
       </Routes>
-      {/* END: routes */}
     </div>
   );
 }
