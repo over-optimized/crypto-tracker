@@ -1,12 +1,7 @@
-// Uncomment this line to use CSS modules
-// import styles from './app.module.css';
 import { Link, Route, Routes } from 'react-router-dom';
 import { TransactionTable } from 'src/components/TransactionTable/TransactionTable';
-import { useTransactionApi } from 'src/hooks/useTransactionApi';
 
 export function App() {
-  const { state } = useTransactionApi();
-
   return (
     <div>
       <h1>Crypto Tracker</h1>

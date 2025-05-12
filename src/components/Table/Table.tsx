@@ -1,4 +1,9 @@
-export function Table() {
+type TableProps = {
+  data: Array<{ [key: string]: any }>;
+};
+
+export function Table({ data }: TableProps) {
+  console.log('Table data:', data);
   return (
     <div>
       <table>
