@@ -1,31 +1,37 @@
+import { Transaction, TransactionResponse } from 'src/apis/transactionApi';
+
 type TableProps = {
-  data: Array<{ [key: string]: any }>;
+  data: TransactionResponse;
+  className?: string;
 };
+
+type TransactionKey = keyof Transaction;
 
 export function Table({ data }: TableProps) {
   console.log('Table data:', data);
+
+  const headers = Object.keys(data[0] || {}).map((key) => {
+    const transaction = data[0];
+    const label = transaction[key as TransactionKey].label;
+    return <th key={key}>{label}</th>;
+  });
+
+  const row = (rowData: Transaction) =>
+    Object.keys(rowData || {}).map((key) => {
+      const typedKey = key as TransactionKey;
+      return <td key={typedKey}>{rowData[typedKey]?.value}</td>;
+    });
+
+  const rows = data.map((rowData, index) => (
+    <tr key={`row${index}`}>{row(rowData)}</tr>
+  ));
   return (
     <div>
       <table>
         <thead>
-          <tr>
-            <th>Header 1</th>
-            <th>Header 2</th>
-            <th>Header 3</th>
-          </tr>
+          <tr>{headers}</tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Row 1, Cell 1</td>
-            <td>Row 1, Cell 2</td>
-            <td>Row 1, Cell 3</td>
-          </tr>
-          <tr>
-            <td>Row 2, Cell 1</td>
-            <td>Row 2, Cell 2</td>
-            <td>Row 2, Cell 3</td>
-          </tr>
-        </tbody>
+        <tbody>{rows}</tbody>
       </table>
     </div>
   );

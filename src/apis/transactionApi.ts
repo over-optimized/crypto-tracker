@@ -5,7 +5,7 @@ type ValueLabel = {
   label: string;
 };
 
-type Transaction = {
+export type Transaction = {
   transactionId: ValueLabel;
   time: ValueLabel;
   status: ValueLabel;
