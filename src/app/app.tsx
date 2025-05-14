@@ -1,14 +1,23 @@
 import { Link, Route, Routes } from 'react-router-dom';
 import { TransactionTable } from 'src/components/TransactionTable/TransactionTable';
+import './app.css';
 
 export function App() {
   return (
     <div>
-      <h1>Crypto Tracker</h1>
+      <div className="mb-4">
+        <h1>Crypto Tracker</h1>
+        <span className="mr-4">
+          <Link to="/">Home</Link>
+        </span>
+        <span className="mr-4">
+          <Link to="/transactions">Transactions</Link>
+        </span>
+      </div>
       <br />
       <hr />
       <br />
-      <div role="navigation">
+      {/* <div role="navigation">
         <ul>
           <li>
             <Link to="/">Home</Link>
@@ -17,7 +26,7 @@ export function App() {
             <Link to="/transactions">Transactions</Link>
           </li>
         </ul>
-      </div>
+      </div> */}
       <Routes>
         <Route
           path="/"
