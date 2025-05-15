@@ -1,19 +1,19 @@
 import { Transaction } from 'src/apis/transactionApi';
+import { headerOrder } from './createHeaderData';
+import { TransactionKey } from './types';
 
 export function createRowData(transaction: Transaction) {
   const id = transaction.transactionId.value;
-  return [
-    <td key={`amount-${id}`}>{transaction.amount.value}</td>,
-    <td key={`feeAmount-${id}`}>{transaction.feeAmount.value}</td>,
-    <td key={`transactionType-${transaction.transactionId}`}>
-      {transaction.transactionType.value}
-    </td>,
-    <td key={`exchangeRate-${transaction.transactionId}`}>
-      {transaction.exchangeRate.value}
-    </td>,
-    <td key={`transactionId-${transaction.transactionId}`}>
-      {transaction.transactionId.value}
-    </td>,
-    <td key={`time-${transaction.transactionId}`}>{transaction.time.value}</td>,
-  ];
+  if (!transaction) {
+    return [];
+  }
+
+  return headerOrder.map((key) => {
+    const value = transaction[key as TransactionKey].value;
+    return (
+      <td key={`${key}-${id}`}>
+        {typeof value === 'object' ? JSON.stringify(value) : value}
+      </td>
+    );
+  });
 }
