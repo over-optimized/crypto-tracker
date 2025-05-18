@@ -1,16 +1,17 @@
 import { useMemo, useState } from 'react';
 import { TransactionResponse } from 'src/apis/transactionApi';
 import { TransactionTableControls } from '../TransactionTableControls/TransactionTableControls';
-import styles from './Table.module.css';
+import { TransactionsSummary } from '../TransactionsSummary/TransactionsSummary';
+import styles from './TransactionsTable.module.css';
 import { createHeaderData } from './createHeaderData';
 import { createRowData } from './createRowData';
 
-type TableProps = {
+type TransactionsTableProps = {
   data: TransactionResponse;
   className?: string;
 };
 
-export function Table({ data }: TableProps) {
+export function TransactionsTable({ data }: TransactionsTableProps) {
   const [state, setState] = useState({
     controls: {
       currency: '',
@@ -51,9 +52,10 @@ export function Table({ data }: TableProps) {
   if (!data || data.length === 0) {
     return <div>No data available</div>;
   }
+
   return (
     <div>
-      <p># Transactions: {data.length}</p>
+      <TransactionsSummary transactions={data} />
       <TransactionTableControls
         className={styles.tableControls}
         state={{ ...state.controls }}

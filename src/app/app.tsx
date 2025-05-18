@@ -1,5 +1,5 @@
 import { Link, Route, Routes } from 'react-router-dom';
-import { TransactionTable } from 'src/components/TransactionTable/TransactionTable';
+import { TransactionPage } from 'src/components/TransactionPage/TransactionPage';
 import './app.css';
 
 export function App() {
@@ -27,7 +27,7 @@ export function App() {
             </div>
           }
         />
-        <Route path="/transactions" element={<TransactionTable />} />
+        <Route path="/transactions" element={<TransactionPage />} />
       </Routes>
     </div>
   );

@@ -1,14 +1,14 @@
 import { useTransactionApi } from 'src/hooks/useTransactionApi';
-import { Table } from '../Table/Table';
+import { TransactionsTable } from '../TransactionsTable/TransactionsTable';
 
-export function TransactionTable() {
+export function TransactionPage() {
   const { response } = useTransactionApi();
 
   return (
     <div>
       <h2>Transaction Table</h2>
       {response.error && <div>Error: Failed to load Transactions</div>}
-      <Table data={response.transactions} />
+      <TransactionsTable data={response.transactions} />
     </div>
   );
 }
