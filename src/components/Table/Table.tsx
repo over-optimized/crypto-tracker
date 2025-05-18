@@ -58,16 +58,10 @@ export function Table({ data }: TableProps) {
         className={styles.tableControls}
         state={{ ...state.controls }}
         onChange={({ name, value }) => {
-          if (name === 'currencyDropdown') {
-            state.controls.currency = value;
-          } else if (name === 'transactionTypeDropdown') {
-            state.controls.transactionType = value;
-          } else if (name === 'transactionStatusDropdown') {
-            state.controls.status = value;
-          }
+          // Don't mutate state directly, let setState handle it
           setState((state) => ({
             ...state,
-            controls: { ...state.controls },
+            controls: { ...state.controls, [name]: value },
           }));
         }}
       />

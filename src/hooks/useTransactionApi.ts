@@ -31,5 +31,5 @@ export function useTransactionApi() {
     })('BTC-account-statement_2025-04-01_2025-05-01.csv');
   }, []);
 
-  return { state };
+  return { response: state };
 }

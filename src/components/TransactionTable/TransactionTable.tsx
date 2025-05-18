@@ -2,11 +2,13 @@ import { useTransactionApi } from 'src/hooks/useTransactionApi';
 import { Table } from '../Table/Table';
 
 export function TransactionTable() {
-  const { state } = useTransactionApi();
+  const { response } = useTransactionApi();
+
   return (
     <div>
       <h2>Transaction Table</h2>
-      <Table data={state.transactions} />
+      {response.error && <div>Error: Failed to load Transactions</div>}
+      <Table data={response.transactions} />
     </div>
   );
 }

@@ -5,11 +5,13 @@ type ControlState = {
   transactionType: string;
   status: string;
 };
+
 type TransactionTableControlsProps = {
   className?: string;
   state: ControlState;
-  onChange?: (event: { name: string; value: string }) => void;
+  onChange?: (event: { name: keyof ControlState; value: string }) => void;
 };
+
 export function TransactionTableControls({
   className,
   state,
@@ -18,8 +20,15 @@ export function TransactionTableControls({
   const onDropdownChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     if (onChange) {
       const label = event.target.options[event.target.selectedIndex].text;
+      const dropdownToStateKeyMap = {
+        currencyDropdown: 'currency',
+        transactionTypeDropdown: 'transactionType',
+        transactionStatusDropdown: 'status',
+      } as const;
       onChange({
-        name: event.target.name,
+        name: dropdownToStateKeyMap[
+          event.target.name as keyof typeof dropdownToStateKeyMap
+        ],
         value: label,
       });
     }
