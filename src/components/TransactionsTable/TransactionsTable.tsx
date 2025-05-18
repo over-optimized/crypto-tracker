@@ -22,6 +22,7 @@ export function TransactionsTable({ data }: TransactionsTableProps) {
   const filteredData = useMemo(
     () =>
       data
+        .filter((row) => row.transactionId && row.transactionId.value !== '') // Filter out invalid transactions
         .filter((row) =>
           state.controls.transactionType
             ? row.transactionType.value === state.controls.transactionType
@@ -39,7 +40,7 @@ export function TransactionsTable({ data }: TransactionsTableProps) {
         ),
     [data, state.controls]
   );
-
+  console.log('Filtered Data:', filteredData);
   const headers = createHeaderData(data[0]);
   const rows = useMemo(
     () =>

@@ -1,4 +1,4 @@
-import { Transaction } from 'src/apis/transactionApi';
+import { Transaction } from 'src/components/TransactionsTable/types';
 
 export function calculateAveragePrice(transactions: Transaction[]) {
   const totalPrice = transactions.reduce((acc, row) => {

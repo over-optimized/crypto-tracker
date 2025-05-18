@@ -1,5 +1,4 @@
-import { Transaction } from 'src/apis/transactionApi';
-import { TransactionKey } from './types';
+import { Transaction, TransactionKey } from './types';
 
 export const headerOrder = [
   'currency',
