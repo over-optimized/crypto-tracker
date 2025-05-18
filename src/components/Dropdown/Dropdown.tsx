@@ -23,7 +23,6 @@ export function Dropdown({
       <label>
         <span>{label} </span>
         <select name={name} id={name} value={value} onChange={onChange}>
-          <option value=""></option>
           {options.map((option) => (
             <option key={option.key} value={option.value}>
               {option.key}

@@ -11,21 +11,41 @@ type TableProps = {
 };
 
 export function Table({ data }: TableProps) {
-  const [state] = useState({
+  const [state, setState] = useState({
     controls: {
       currency: '',
       transactionType: '',
       status: '',
     },
   });
-  // console.log('Table data:', data);
+  const filteredData = useMemo(
+    () =>
+      data
+        .filter((row) =>
+          state.controls.transactionType
+            ? row.transactionType.value === state.controls.transactionType
+            : true
+        )
+        .filter((row) =>
+          state.controls.status
+            ? row.status.value === state.controls.status
+            : true
+        )
+        .filter((row) =>
+          state.controls.currency
+            ? row.currency.value === state.controls.currency
+            : true
+        ),
+    [data, state.controls]
+  );
+
   const headers = createHeaderData(data[0]);
   const rows = useMemo(
     () =>
-      data.map((rowData) => (
+      filteredData.map((rowData) => (
         <tr key={rowData.transactionId.value}>{createRowData(rowData)}</tr>
       )),
-    [data]
+    [filteredData]
   );
 
   if (!data || data.length === 0) {
@@ -38,7 +58,17 @@ export function Table({ data }: TableProps) {
         className={styles.tableControls}
         state={{ ...state.controls }}
         onChange={({ name, value }) => {
-          state.controls[name] = value;
+          if (name === 'currencyDropdown') {
+            state.controls.currency = value;
+          } else if (name === 'transactionTypeDropdown') {
+            state.controls.transactionType = value;
+          } else if (name === 'transactionStatusDropdown') {
+            state.controls.status = value;
+          }
+          setState((state) => ({
+            ...state,
+            controls: { ...state.controls },
+          }));
         }}
       />
       <table className={styles.table}>
