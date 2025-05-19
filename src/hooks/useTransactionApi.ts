@@ -1,35 +1,50 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { transactionApi, TransactionResponse } from 'src/apis/transactionApi';
 import { tryCatch } from 'src/utils/tryCatch';
 
 export function useTransactionApi() {
   const [state, setState] = useState<{
-    transactions: TransactionResponse;
+    transactions: { [key: string]: TransactionResponse };
     error: string | null;
   }>({
-    transactions: [],
+    transactions: {},
     error: null,
   });
 
-  useEffect(() => {
-    (async (fileName: string) => {
-      try {
-        const { data, error } = await tryCatch(transactionApi({ fileName }));
-        if (error) {
-          throw error;
-        }
-        setState((prevState) => ({
-          ...prevState,
-          transactions: data,
-        }));
-      } catch (error) {
-        setState((prevState) => ({
-          ...prevState,
-          error: error as string,
-        }));
-      }
-    })('BTC-account-statement_2025-04-01_2025-05-01.csv');
-  }, []);
+  const fetchTransaction = async (
+    fileName: string
+  ): Promise<{ data: TransactionResponse; error: string | null }> => {
+    const { data, error } = await tryCatch(transactionApi({ fileName }));
+    if (error) {
+      setState((prevState) => ({
+        ...prevState,
+        error: error.message,
+      }));
+      return { data: [], error: error.message };
+    } else {
+      setState((prevState) => ({
+        ...prevState,
+        transactions: {
+          ...prevState.transactions,
+          [fileName]: data,
+        },
+      }));
+      return { data, error: null };
+    }
+  };
 
-  return { response: state };
+  const getTransactions = async (
+    fileName: string
+  ): Promise<{ data: TransactionResponse; error: string | null }> => {
+    if (state.transactions[fileName]) {
+      return Promise.resolve({
+        data: state.transactions[fileName],
+        error: null,
+      });
+    } else {
+      return fetchTransaction(fileName);
+    }
+  };
+
+  return { response: state, getTransactions };
 }

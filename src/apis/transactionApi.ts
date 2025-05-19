@@ -1,4 +1,7 @@
-import { Transaction } from 'src/components/TransactionsTable/types';
+import {
+  Transaction,
+  ValueLabel,
+} from 'src/components/TransactionsTable/types';
 import { camelCase } from 'src/utils/camelCase';
 
 export type TransactionResponse = Transaction[];
@@ -7,11 +10,34 @@ type Options = {
   fileName: string;
 };
 
+const JsonMapper = {
+  parse: (data: { [key: string]: ValueLabel }[]): TransactionResponse => {
+    const transactionResponse: TransactionResponse = data.map((row) => {
+      return {
+        transactionId: row.transactionId,
+        time: row.time || row.createdTime,
+        status: row.status,
+        transactionType: row.transactionType || {
+          label: 'Transaction Type',
+          value: 'Exchange',
+        }, // may not be present in all files
+        amount: row.amount || row.amountBought,
+        currency: row.currency || row.currencyBought,
+        feeAmount: row.feeAmount || { label: 'Fee Amount', value: '0' },
+        feeCurrency: row.feeCurrency || { label: 'Fee Currency', value: 'N/A' },
+        description: row.description || { label: 'Description', value: '' },
+        exchangeRate: row.exchangeRate,
+      };
+    });
+
+    return transactionResponse;
+  },
+};
+
 export function transactionApi({
   fileName,
 }: Options): Promise<TransactionResponse> {
-  const url = `/assets/json/strike/${fileName}`;
-  return fetch(url, {
+  return fetch(`/assets/json/strike/${fileName}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'text/csv',
@@ -43,7 +69,10 @@ export function transactionApi({
         });
         return obj;
       });
-      return jsonData;
+      console.log('jsonData', jsonData);
+      const formattedData = JsonMapper.parse(jsonData);
+      console.log('formattedData', formattedData);
+      return formattedData;
     })
     .catch((error) => {
       console.error('Error fetching or parsing data:', error);

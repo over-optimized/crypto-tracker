@@ -1,4 +1,4 @@
-type ValueLabel = {
+export type ValueLabel = {
   value: string;
   label: string;
 };
