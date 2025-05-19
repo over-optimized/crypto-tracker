@@ -3,12 +3,30 @@ import {
   ValueLabel,
 } from 'src/components/TransactionsTable/types';
 import { camelCase } from 'src/utils/camelCase';
+import { z } from 'zod';
 
 export type TransactionResponse = Transaction[];
 
 type Options = {
   fileName: string;
 };
+const ValueLabelSchema = z.object({
+  value: z.string(),
+  label: z.string(),
+});
+const TransactionSchema = z.object({
+  transactionId: ValueLabelSchema,
+  time: ValueLabelSchema,
+  status: ValueLabelSchema,
+  transactionType: ValueLabelSchema,
+  amount: ValueLabelSchema,
+  currency: ValueLabelSchema,
+  feeAmount: ValueLabelSchema,
+  feeCurrency: ValueLabelSchema,
+  description: ValueLabelSchema,
+  exchangeRate: ValueLabelSchema.optional(),
+});
+const TransactionResponseSchema = z.array(TransactionSchema);
 
 const JsonMapper = {
   parse: (data: { [key: string]: ValueLabel }[]): TransactionResponse => {
@@ -29,7 +47,7 @@ const JsonMapper = {
         exchangeRate: row.exchangeRate,
       };
     });
-
+    TransactionResponseSchema.parse(transactionResponse);
     return transactionResponse;
   },
 };
@@ -55,6 +73,7 @@ export function transactionApi({
       const rows = data
         .replace(/\r/g, '')
         .split('\n')
+        .filter((row) => row.trim() !== '') // Filter out empty rows
         .map((row) => row.split(','));
       const headers = rows[0];
       const jsonData = rows.slice(1).map((row) => {

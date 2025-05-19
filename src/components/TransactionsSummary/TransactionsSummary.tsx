@@ -56,7 +56,11 @@ export function TransactionsSummary({
 
   return (
     <div>
-      <table className={styles.summaryTable} aria-label="Transaction summary">
+      <table
+        className={styles.summaryTable}
+        aria-label="Transaction summary"
+        data-testid="transaction-summary"
+      >
         <tbody>
           <tr>
             <th>Total transactions</th>
