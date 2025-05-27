@@ -50,3 +50,10 @@
 .mb-4 {
   margin-bottom: 1rem;
 }
+
+.d-inline {
+  display: inline;
+}
+.d-block {
+  display: block;
+}

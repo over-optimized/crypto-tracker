@@ -1,1 +1,16 @@
+body {
+  background-color: rgb(30, 30, 30);
+  color: #fff;
+}
 
+.light-link {
+  color: #fff;
+  text-decoration: none;
+}
+.light-link:hover {
+  color: #ccc;
+  text-decoration: underline;
+}
+.light-link:visited {
+  color: #ccc;
+}

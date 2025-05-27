@@ -21,6 +21,7 @@ export function TransactionPage() {
         <Dropdown
           name="statements"
           label="Select Statement"
+          styleType="block"
           options={[
             {
               key: '',

@@ -42,3 +42,5 @@ Thumbs.db
 .nx/workspace-data
 
 src/assets/json/strike
+
+.env

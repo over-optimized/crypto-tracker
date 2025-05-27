@@ -2,6 +2,7 @@ type DropdownProps = {
   name: string;
   label: string;
   value?: string;
+  styleType?: 'inline' | 'block';
   options: {
     key: string;
     value: string;
@@ -15,13 +16,16 @@ export function Dropdown({
   label,
   value,
   options,
+  styleType = 'inline',
   className,
   onChange,
 }: DropdownProps) {
   return (
     <div className={className}>
       <label>
-        <span>{label} </span>
+        <span className={styleType === 'inline' ? 'd-inline' : 'd-block'}>
+          {label}{' '}
+        </span>
         <select
           name={name}
           id={name}
