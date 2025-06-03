@@ -3,10 +3,15 @@ import { calculateAveragePrice } from 'src/utils/calculateAveragePrice';
 import { calculateDateRange } from 'src/utils/calculateDateRange';
 import { calculateTotalBtc } from 'src/utils/calculateTotalBtc';
 import { formatCurrency } from 'src/utils/formatCurrency';
+import { Modal } from '../Modal/Modal';
 import { Transaction } from '../TransactionsTable/types';
 import styles from './TransactionsSummary.module.css';
 
 type TransactionsSummaryProps = {
+  // modal: {
+  //   isOpen: boolean;
+  //   onClose: () => void;
+  // };
   transactions: Transaction[];
 };
 export function TransactionsSummary({
@@ -53,7 +58,9 @@ export function TransactionsSummary({
   );
 
   const [showBtc, setShowBtc] = useState(false);
-
+  const onClose = () => {
+    setShowBtc(false);
+  };
   return (
     <div>
       <table
@@ -72,36 +79,42 @@ export function TransactionsSummary({
           </tr>
         </tbody>
       </table>
+      <Modal
+        isOpen={showBtc}
+        onClose={onClose}
+        title="Bitcoin transaction summary"
+      >
+        <table
+          id="btc-summary-table"
+          aria-label="Bitcoin transaction summary"
+          className={`${styles.summaryTable} ${
+            showBtc ? styles.visible : styles.invisible
+          }`}
+        >
+          <tbody>
+            <tr>
+              <th>Average BTC price</th>
+              <td>{averageBtcPriceFormatted}</td>
+            </tr>
+            <tr>
+              <th>Total BTC</th>
+              <td>₿{totalBtc.toFixed(8)}</td>
+            </tr>
+            <tr>
+              <th>Total BTC Sent</th>
+              <td>₿{totalBtcSent.toFixed(8)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </Modal>
 
       <button
         onClick={() => setShowBtc(!showBtc)}
         aria-expanded={showBtc}
         aria-controls="btc-summary-table"
       >
-        BTC Summary {showBtc ? '-' : '+'}
+        BTC Summary
       </button>
-      <table
-        id="btc-summary-table"
-        aria-label="Bitcoin transaction summary"
-        className={`${styles.summaryTable} ${
-          showBtc ? styles.visible : styles.invisible
-        }`}
-      >
-        <tbody>
-          <tr>
-            <th>Average BTC price</th>
-            <td>{averageBtcPriceFormatted}</td>
-          </tr>
-          <tr>
-            <th>Total BTC</th>
-            <td>₿{totalBtc.toFixed(8)}</td>
-          </tr>
-          <tr>
-            <th>Total BTC Sent</th>
-            <td>₿{totalBtcSent.toFixed(8)}</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   );
 }

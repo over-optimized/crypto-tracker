@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { TransactionResponse } from 'src/apis/transactionApi';
 import { paginate } from 'src/utils/paginate';
-import { Modal } from '../Modal/Modal';
 import { TransactionTableControls } from '../TransactionTableControls/TransactionTableControls';
 import { TransactionsSummary } from '../TransactionsSummary/TransactionsSummary';
 import styles from './TransactionsTable.module.css';
@@ -107,7 +106,6 @@ export function TransactionsTable({ data }: TransactionsTableProps) {
 
   return (
     <div>
-      <button onClick={() => toggleModal(true)}>Modal</button>
       <TransactionsSummary transactions={data} />
       <TransactionTableControls
         className={styles.tableControls}
@@ -137,9 +135,6 @@ export function TransactionsTable({ data }: TransactionsTableProps) {
           <button onClick={() => changePage('next')}>&gt; Next</button>
         </div>
       </div>
-      <Modal {...state.modal} title={'My Modal'}>
-        <div>Modal Content</div>
-      </Modal>
     </div>
   );
 }
