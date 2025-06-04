@@ -55,7 +55,7 @@ const JsonMapper = {
 export function transactionApi({
   fileName,
 }: Options): Promise<TransactionResponse> {
-  return fetch(`/assets/json/strike/${fileName}`, {
+  return fetch(`/assets/csv/strike/${fileName}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'text/csv',

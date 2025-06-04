@@ -132,7 +132,7 @@ export function TransactionsTable({ data }: TransactionsTableProps) {
           Page {state.pageInfo.currentPage} of {state.pageInfo.totalPages}
         </div>
         <div>
-          <button onClick={() => changePage('next')}>&gt; Next</button>
+          <button onClick={() => changePage('next')}>Next &gt;</button>
         </div>
       </div>
     </div>
