@@ -1,9 +1,10 @@
 import { Statement, ValueLabel } from 'src/components/TransactionsTable/types';
 import { camelCase } from 'src/utils/camelCase';
 import { z } from 'zod';
+import { TransactionResponse } from './transactionApi';
 
 export type StatementResponse = Statement[];
-
+// const response: TransactionResponse = []
 type Options = {
   fileName: string;
 };
@@ -28,7 +29,7 @@ const StatementSchema = z.object({
 const StatementResponseSchema = z.array(StatementSchema);
 
 const JsonMapper = {
-  parse: (data: { [key: string]: ValueLabel }[]): StatementResponse => {
+  parse: (data: { [key: string]: ValueLabel }[]): TransactionResponse => {
     const statementResponse: StatementResponse = data.map((row) => {
       return {
         reference: row.reference,
@@ -46,13 +47,29 @@ const JsonMapper = {
       };
     });
     StatementResponseSchema.parse(statementResponse);
-    return statementResponse;
+    // map StatementResponse to TransactionResponse
+    const transactionResponse: TransactionResponse = statementResponse.map(
+      (statement) => ({
+        transactionId: statement.reference,
+        time: statement.dateAndTime,
+        status: { label: 'Status', value: 'Completed' }, // Placeholder, as status is not in the statement
+        transactionType: statement.transactionType,
+        amount: statement.amountBtc,
+        currency: { label: 'Currency', value: 'BTC' }, // Placeholder, as currency is not in the statement
+        feeAmount: statement.feeUsd,
+        feeCurrency: { label: 'Fee Currency', value: 'USD' }, // Placeholder, as fee currency is not in the statement
+        description: statement.description,
+        exchangeRate: { label: 'Exchange Rate', value: 'N/A' }, // Placeholder, as exchange rate is not in the statement
+      })
+    );
+
+    return transactionResponse;
   },
 };
 
 export function statementApi({
   fileName,
-}: Options): Promise<StatementResponse> {
+}: Options): Promise<TransactionResponse> {
   return fetch(`/assets/csv/strike/${fileName}`, {
     method: 'GET',
     headers: {
