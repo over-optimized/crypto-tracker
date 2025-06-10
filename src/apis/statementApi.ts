@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { TransactionResponse } from './transactionApi';
 
 export type StatementResponse = Statement[];
-// const response: TransactionResponse = []
+
 type Options = {
   fileName: string;
 };
@@ -28,7 +28,7 @@ const StatementSchema = z.object({
 });
 const StatementResponseSchema = z.array(StatementSchema);
 
-const JsonMapper = {
+export const JsonMapper = {
   parse: (data: { [key: string]: ValueLabel }[]): TransactionResponse => {
     const statementResponse: StatementResponse = data.map((row) => {
       return {
@@ -67,9 +67,7 @@ const JsonMapper = {
   },
 };
 
-export function statementApi({
-  fileName,
-}: Options): Promise<TransactionResponse> {
+export function statementApi({ fileName }: Options): Promise<Statement[]> {
   return fetch(`/assets/csv/strike/${fileName}`, {
     method: 'GET',
     headers: {
@@ -103,10 +101,8 @@ export function statementApi({
         });
         return obj;
       });
-      console.log('jsonData', jsonData);
-      const formattedData = JsonMapper.parse(jsonData);
-      console.log('formattedData', formattedData);
-      return formattedData;
+
+      return jsonData;
     })
     .catch((error) => {
       console.error('Error fetching or parsing data:', error);

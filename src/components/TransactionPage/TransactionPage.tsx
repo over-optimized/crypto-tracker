@@ -1,21 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { statementApi } from 'src/apis/statementApi';
+import { JsonMapper, statementApi } from 'src/apis/statementApi';
 import { strikeApi } from 'src/apis/strikeApi';
-import { TransactionResponse } from 'src/apis/transactionApi';
 import { Dropdown } from '../Dropdown/Dropdown';
 import { TransactionsTable } from '../TransactionsTable/TransactionsTable';
 
 export function TransactionPage() {
-  // const { getTransactions } = useTransactionApi();
-  const [selectedData, setSelectedData] = useState([] as TransactionResponse);
-  const [error, setError] = useState(null as string | null);
   const [selectedStatement, setSelectedStatement] = useState('');
 
   const {
     data: stikeData,
     isLoading,
-    error: queryError,
+    error,
   } = useQuery({
     queryKey: ['strikeData'],
     queryFn: strikeApi,
@@ -31,7 +27,12 @@ export function TransactionPage() {
   });
 
   console.log('statementsData', statementsData);
-  // const { data, isLoading, error } = useQuery([''], strikeApi);
+
+  const statements = JsonMapper.parse(statementsData ?? []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -66,7 +67,7 @@ export function TransactionPage() {
         />
       </div>
       {error && <div>Error: Failed to load Transactions</div>}
-      <TransactionsTable data={statementsData ?? []} />
+      <TransactionsTable data={statements} />
     </div>
   );
 }
