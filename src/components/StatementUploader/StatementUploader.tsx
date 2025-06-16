@@ -3,6 +3,22 @@ import { StrikeStatementSchema } from 'src/schemas/StrikeStatementSchema';
 import { csvToJson } from 'src/utils/csvToJson';
 import { cryptoTransactionFromStrikeStatement } from 'src/utils/mapper';
 
+function csvToTransactions(text: string) {
+  const json = csvToJson(text);
+  // filter by transaction type for Purchase transactions
+  const filteredJson = json.filter(
+    (item) => item.transactionType === 'Purchase'
+  );
+  // verify the JSON structure with Zod
+  const strikeStatement = StrikeStatementSchema(filteredJson);
+  console.log('Verified Strike Statement:', strikeStatement);
+  // convert to CryptoTransaction
+  const transactions = strikeStatement.map(
+    cryptoTransactionFromStrikeStatement
+  );
+  return transactions;
+}
+
 export function StatementUploader() {
   const [file, setFile] = useState<File | null>(null);
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,18 +53,7 @@ export function StatementUploader() {
         // Handle the file upload logic here
         console.log('Uploading file:', file.name);
         file.text().then((text) => {
-          const json = csvToJson(text);
-          // filter by transaction type for Purchase transactions
-          const filteredJson = json.filter(
-            (item) => item.transactionType === 'Purchase'
-          );
-          // verify the JSON structure with Zod
-          const strikeStatement = StrikeStatementSchema(filteredJson);
-          console.log('Verified Strike Statement:', strikeStatement);
-          // convert to CryptoTransaction
-          const transactions = strikeStatement.map(
-            cryptoTransactionFromStrikeStatement
-          );
+          const transactions = csvToTransactions(text);
           console.log('Converted Transactions:', transactions);
         });
       } catch (error) {

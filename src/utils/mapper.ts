@@ -5,11 +5,8 @@ import {
 import { StrikeStatement } from 'src/types/StrikeStatement';
 
 const allowedTransactionTypes: CryptoTransactionType[] = [
-  'purchase',
-  'sale',
-  'transfer',
-  'withdrawal',
-  'deposit',
+  'Purchase',
+  'Deposit',
 ];
 
 function isCryptoTransactionType(type: string): type is CryptoTransactionType {

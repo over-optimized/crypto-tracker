@@ -40,6 +40,6 @@ export function useStatementLoader() {
 
   return {
     statements: mapStatements(statements, fileNames),
-    strikeStatements: [],
+    strikeStatements: mapStatements(statements, fileNames),
   };
 }

@@ -1,27 +1,4 @@
-/* Example of a CryptoTransaction object
-{
-  "reference": "8457f6db-fa05-474f-9738-771c2a0a2b4c",
-  "date": "2025-05-01T14:36:06Z",
-  "type": "purchase",
-  "currency": "BTC",
-  "amount": 0.00051796,
-  "amountUsd": -50.00,
-  "fee": 0,
-  "feeUsd": 0,
-  "priceUsd": 96532.55,
-  "costBasisUsd": 50.00,
-  "destination": null,
-  "description": null,
-  "note": null
-}
-*/
-
-export type CryptoTransactionType =
-  | 'purchase'
-  | 'sale'
-  | 'transfer'
-  | 'withdrawal'
-  | 'deposit';
+export type CryptoTransactionType = 'Purchase' | 'Deposit';
 export type CryptoTransaction = {
   reference: string; // Unique identifier for the transaction
   date: string; // ISO 8601 date string
